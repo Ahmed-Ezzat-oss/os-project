@@ -9,18 +9,14 @@
     <!-- Google Fonts: Inter + JetBrains Mono -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <!-- jQuery Terminal -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.35.2/js/jquery.terminal.min.js">
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.35.2/js/jquery.terminal.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.35.2/css/jquery.terminal.min.css">
     <!-- SortableJS -->
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
     <style>
         :root {
-            /* ----- Dark Theme (default) ----- */
             --bg-body: radial-gradient(ellipse at 30% 20%, #0b1320 0%, #02050a 70%);
             --bg-desktop-icon: rgba(16, 24, 40, 0.55);
             --bg-desktop-icon-hover: rgba(45, 100, 220, 0.55);
@@ -104,10 +100,9 @@
             transition: background 0.4s ease, color 0.3s ease;
             position: relative;
             user-select: none;
-            -webkit-user-select: none;
         }
 
-        /* ----- جسيمات خلفية ديناميكية (اختياري - تأثير بصري راقي) ----- */
+        /* خلفية متحركة */
         .bg-particles {
             position: fixed;
             inset: 0;
@@ -123,22 +118,13 @@
             animation: floatParticle 18s infinite ease-in-out;
         }
         @keyframes floatParticle {
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-            25% {
-                transform: translate(30px, -40px) scale(1.4);
-            }
-            50% {
-                transform: translate(-20px, -20px) scale(0.8);
-            }
-            75% {
-                transform: translate(15px, 30px) scale(1.2);
-            }
+            0%,100% { transform: translate(0,0) scale(1); }
+            25% { transform: translate(30px,-40px) scale(1.4); }
+            50% { transform: translate(-20px,-20px) scale(0.8); }
+            75% { transform: translate(15px,30px) scale(1.2); }
         }
 
-        /* ----- سطح المكتب ----- */
+        /* سطح المكتب - مساحة قابلة للتمرير وسحب الأيقونات بحرية */
         .desktop {
             display: flex;
             flex-wrap: wrap;
@@ -146,10 +132,12 @@
             justify-content: flex-start;
             gap: 18px;
             padding: 28px 24px;
-            height: calc(100vh - 58px);
+            min-height: calc(100vh - 58px);
+            width: 100%;
             position: relative;
             z-index: 10;
             align-content: flex-start;
+            overflow-y: auto;
         }
         .desktop-icon {
             display: inline-flex;
@@ -161,9 +149,8 @@
             padding: 14px 6px 10px;
             background: var(--bg-desktop-icon);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-radius: var(--radius-xl);
-            cursor: pointer;
+            cursor: grab;
             transition: all var(--transition-smooth);
             border: 1px solid rgba(255, 255, 255, 0.12);
             box-shadow: var(--shadow-sm);
@@ -172,33 +159,18 @@
             overflow: hidden;
             text-align: center;
         }
-        .desktop-icon::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.15), transparent 70%);
-            pointer-events: none;
-        }
+        .desktop-icon:active { cursor: grabbing; }
         .desktop-icon:hover {
             transform: translateY(-5px);
             background: var(--bg-desktop-icon-hover);
             border-color: rgba(255, 255, 255, 0.3);
             box-shadow: 0 12px 32px -6px var(--accent-glow);
         }
-        .desktop-icon:active {
-            transform: scale(0.94);
-            cursor: grabbing;
-        }
         .desktop-icon i {
             font-size: 36px;
             margin-bottom: 6px;
             pointer-events: none;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-            transition: transform var(--transition-fast);
-        }
-        .desktop-icon:hover i {
-            transform: scale(1.08);
         }
         .desktop-icon span {
             font-size: 11px;
@@ -206,9 +178,7 @@
             text-align: center;
             pointer-events: none;
             line-height: 1.3;
-            letter-spacing: -0.01em;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-            word-break: break-word;
         }
         .desktop-icon[data-sortable="false"] {
             border: 1px dashed rgba(255, 255, 255, 0.18);
@@ -218,19 +188,12 @@
             border-color: var(--accent);
             background: rgba(40, 60, 100, 0.5);
         }
-
         /* أيقونات خاصة */
-        .desktop-icon.my-computer i {
-            color: #a78bfa;
-        }
-        .desktop-icon.terminal-icon i {
-            color: #5effbc;
-        }
-        .desktop-icon.documents-icon i {
-            color: var(--icon-folder);
-        }
+        .desktop-icon.my-computer i { color: #a78bfa; }
+        .desktop-icon.terminal-icon i { color: #5effbc; }
+        .desktop-icon.documents-icon i { color: var(--icon-folder); }
 
-        /* ----- شريط المهام ----- */
+        /* شريط المهام */
         .taskbar {
             position: fixed;
             bottom: 0;
@@ -239,7 +202,6 @@
             height: 58px;
             background: var(--taskbar-bg);
             backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: space-between;
@@ -250,7 +212,6 @@
             font-size: 13px;
             font-weight: 500;
             box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.3);
-            transition: background 0.3s;
         }
         .start-button {
             background: rgba(59, 130, 246, 0.25);
@@ -263,15 +224,11 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all var(--transition-smooth);
             font-weight: 600;
-            letter-spacing: 0.02em;
         }
         .start-button:hover {
             background: rgba(59, 130, 246, 0.5);
             border-color: rgba(255, 255, 255, 0.35);
             box-shadow: 0 0 20px var(--accent-glow);
-        }
-        .start-button:active {
-            transform: scale(0.95);
         }
         .taskbar-icons {
             display: flex;
@@ -298,7 +255,7 @@
             box-shadow: 0 0 14px var(--accent-glow);
         }
         .taskbar-time {
-            font-family: 'JetBrains Mono', 'Inter', monospace;
+            font-family: 'JetBrains Mono', monospace;
             background: rgba(0, 0, 0, 0.4);
             padding: 7px 18px;
             border-radius: 40px;
@@ -308,14 +265,10 @@
             font-weight: 500;
             font-size: 13px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            letter-spacing: 0.03em;
         }
-        .taskbar-time i {
-            color: #5effbc;
-            font-size: 12px;
-        }
+        .taskbar-time i { color: #5effbc; }
 
-        /* ----- قائمة ابدأ ----- */
+        /* قائمة ابدأ */
         .start-menu {
             position: fixed;
             bottom: 72px;
@@ -323,7 +276,6 @@
             width: 310px;
             background: var(--window-bg);
             backdrop-filter: blur(32px);
-            -webkit-backdrop-filter: blur(32px);
             border-radius: var(--radius-xl);
             border: 1px solid rgba(255, 255, 255, 0.15);
             z-index: 1100;
@@ -333,14 +285,8 @@
             animation: fadeInUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(15px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         .start-header {
             padding: 20px 22px;
@@ -348,11 +294,8 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             font-weight: 700;
             font-size: 15px;
-            letter-spacing: 0.02em;
         }
-        .start-items {
-            padding: 10px;
-        }
+        .start-items { padding: 10px; }
         .start-item {
             display: flex;
             align-items: center;
@@ -376,7 +319,7 @@
             color: var(--accent);
         }
 
-        /* ----- النوافذ ----- */
+        /* النوافذ العامة */
         .window {
             position: fixed;
             top: 80px;
@@ -385,7 +328,6 @@
             height: 560px;
             background: var(--window-bg);
             backdrop-filter: blur(32px);
-            -webkit-backdrop-filter: blur(32px);
             border-radius: var(--radius-xl);
             border: 1px solid rgba(255, 255, 255, 0.15);
             display: none;
@@ -394,17 +336,10 @@
             z-index: 1100;
             box-shadow: var(--shadow-lg);
             animation: windowOpen 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            transition: border-radius 0.25s, box-shadow 0.25s;
         }
         @keyframes windowOpen {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         .window.maximized {
             width: 100% !important;
@@ -425,24 +360,10 @@
             cursor: grab;
             font-weight: 600;
             font-size: 13px;
-            letter-spacing: 0.02em;
         }
-        .window-header:active {
-            cursor: grabbing;
-        }
-        .window-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .window-title i {
-            font-size: 15px;
-            opacity: 0.8;
-        }
-        .window-controls {
-            display: flex;
-            gap: 6px;
-        }
+        .window-header:active { cursor: grabbing; }
+        .window-title { display: flex; align-items: center; gap: 10px; }
+        .window-controls { display: flex; gap: 6px; }
         .window-controls button {
             background: rgba(255, 255, 255, 0.06);
             border: none;
@@ -456,16 +377,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid transparent;
         }
-        .window-controls button:hover {
-            background: rgba(255, 255, 255, 0.18);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
+        .window-controls button:hover { background: rgba(255, 255, 255, 0.18); }
         .close-btn:hover {
             background: #ef4444 !important;
             color: white !important;
-            border-color: #ef4444 !important;
             box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
         }
         .window-body {
@@ -473,37 +389,19 @@
             overflow: auto;
             padding: 16px;
             scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-        }
-        .window-body::-webkit-scrollbar {
-            width: 6px;
-        }
-        .window-body::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .window-body::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
         }
 
-        /* ----- مستكشف الملفات ----- */
-        .explorer-container {
-            display: flex;
-            height: 100%;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-        }
+        /* مستكشف الملفات */
+        .explorer-container { display: flex; height: 100%; }
         .explorer-sidebar {
             width: 200px;
             background: var(--explorer-sidebar-bg);
             border-right: 1px solid rgba(255, 255, 255, 0.08);
             padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
         }
         .explorer-sidebar div {
             padding: 9px 14px;
+            margin: 4px 0;
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: all var(--transition-fast);
@@ -518,10 +416,6 @@
             background: var(--explorer-item-hover);
             color: var(--text-color);
         }
-        .explorer-sidebar div i {
-            width: 16px;
-            text-align: center;
-        }
         .explorer-main {
             flex: 1;
             padding: 14px;
@@ -532,11 +426,9 @@
             background: rgba(0, 0, 0, 0.2);
             padding: 8px 16px;
             border-radius: 40px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
             font-size: 12px;
             margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: var(--text-secondary);
         }
         .explorer-grid {
             display: flex;
@@ -563,25 +455,11 @@
             background: var(--explorer-item-hover);
             border-color: rgba(255, 255, 255, 0.15);
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.4);
         }
-        .explorer-item:active {
-            transform: scale(0.94);
-        }
-        .explorer-item i {
-            font-size: 38px;
-            display: block;
-            pointer-events: none;
-        }
-        .explorer-item span {
-            font-size: 10px;
-            font-weight: 500;
-            pointer-events: none;
-            word-break: break-word;
-            line-height: 1.3;
-        }
+        .explorer-item i { font-size: 38px; display: block; pointer-events: none; }
+        .explorer-item span { font-size: 10px; font-weight: 500; pointer-events: none; }
 
-        /* ----- الآلة الحاسبة ----- */
+        /* آلة حاسبة */
         .calculator {
             padding: 16px;
             border-radius: var(--radius-xl);
@@ -598,15 +476,7 @@
             font-size: 2.2rem;
             margin-bottom: 16px;
             color: #5effbc;
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 500;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            overflow-x: auto;
-            white-space: nowrap;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
+            font-family: monospace;
         }
         .calc-buttons {
             display: grid;
@@ -623,19 +493,12 @@
             font-size: 1.2rem;
             cursor: pointer;
             transition: all var(--transition-fast);
-            font-weight: 500;
-            border: 1px solid rgba(255, 255, 255, 0.04);
         }
         .calc-btn:hover {
             background: var(--calc-btn-hover);
             transform: scale(1.03);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-        .calc-btn:active {
-            transform: scale(0.94);
-        }
-        .calc-btn[data-op],
-        .calc-btn[data-eval] {
+        .calc-btn[data-op], .calc-btn[data-eval] {
             background: var(--accent);
             color: white;
             font-weight: 700;
@@ -646,7 +509,7 @@
             font-weight: 700;
         }
 
-        /* ----- Snake Game ----- */
+        /* لعبة الثعبان */
         .snake-game {
             text-align: center;
             display: flex;
@@ -664,10 +527,10 @@
             color: #5effbc;
             font-size: 1.2rem;
             font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: monospace;
         }
 
-        /* ----- قائمة السياق ----- */
+        /* قائمة السياق */
         .context-menu {
             position: fixed;
             background: var(--modal-bg);
@@ -676,10 +539,8 @@
             padding: 6px 0;
             z-index: 2000;
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             min-width: 190px;
             box-shadow: var(--shadow-lg);
-            animation: fadeInUp 0.18s ease;
         }
         .context-menu-item {
             padding: 9px 22px;
@@ -696,31 +557,17 @@
             background: rgba(59, 130, 246, 0.3);
             color: var(--text-color);
         }
-        .context-menu-item i {
-            width: 16px;
-            text-align: center;
-        }
 
-        /* ----- Modal مخصص ----- */
+        /* مودال مخصص */
         .custom-modal {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.65);
             backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
             z-index: 3000;
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.2s ease;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
         }
         .modal-content {
             background: var(--modal-bg);
@@ -730,11 +577,6 @@
             border: 1px solid rgba(255, 255, 255, 0.18);
             text-align: center;
             color: var(--text-color);
-            box-shadow: var(--shadow-lg);
-        }
-        .modal-content h3 {
-            margin-bottom: 12px;
-            font-weight: 600;
         }
         .modal-content input {
             width: 100%;
@@ -744,13 +586,7 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             background: rgba(0, 0, 0, 0.2);
             color: inherit;
-            font-family: inherit;
             outline: none;
-            transition: border var(--transition-fast);
-        }
-        .modal-content input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
         .modal-content button {
             background: var(--accent);
@@ -761,25 +597,15 @@
             margin: 4px 6px;
             cursor: pointer;
             font-weight: 600;
-            transition: all var(--transition-fast);
-            font-family: inherit;
         }
-        .modal-content button:hover {
-            transform: scale(1.04);
-            box-shadow: 0 4px 16px var(--accent-glow);
-        }
-        .modal-content button#modalCancel {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
-        }
+        .modal-content button:hover { transform: scale(1.04); }
 
-        /* ----- شاشة تسجيل الدخول ----- */
+        /* شاشة تسجيل الدخول */
         .login-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             z-index: 10000 !important;
             display: flex;
             align-items: center;
@@ -792,12 +618,6 @@
             width: 380px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
-            box-shadow: var(--shadow-lg);
-        }
-        .login-box h2 {
-            margin-bottom: 20px;
-            font-weight: 700;
-            letter-spacing: 0.03em;
         }
         .login-box input {
             width: 100%;
@@ -807,13 +627,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             background: rgba(0, 0, 0, 0.25);
             color: inherit;
-            font-family: inherit;
             outline: none;
-            transition: border var(--transition-fast);
-        }
-        .login-box input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
         }
         .login-box button {
             background: var(--accent);
@@ -823,36 +637,25 @@
             color: white;
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
-            transition: all var(--transition-fast);
             margin-top: 10px;
-            font-family: inherit;
-        }
-        .login-box button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px var(--accent-glow);
         }
 
-        /* ----- بطاقات الإعدادات ومدير المهام ----- */
-        .settings-card,
-        .task-card {
+        /* الإعدادات ومدير المهام */
+        .settings-card, .task-card {
             background: var(--card-bg);
             border-radius: var(--radius-lg);
             padding: 18px;
             margin-bottom: 18px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all var(--transition-fast);
         }
-        .settings-card h4,
-        .task-card h4 {
+        .settings-card h4, .task-card h4 {
             margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
             font-weight: 600;
         }
-        .settings-card button,
-        .task-card button {
+        .settings-card button, .task-card button {
             background: var(--accent);
             border: none;
             padding: 7px 18px;
@@ -860,42 +663,17 @@
             color: white;
             cursor: pointer;
             margin: 4px;
-            font-weight: 500;
             font-size: 12px;
-            transition: all var(--transition-fast);
-            font-family: inherit;
-        }
-        .settings-card button:hover,
-        .task-card button:hover {
-            transform: scale(1.04);
-            box-shadow: 0 4px 14px var(--accent-glow);
-        }
-        .settings-card input[type="text"],
-        .settings-card input[type="password"] {
-            width: 100%;
-            padding: 9px 14px;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(0, 0, 0, 0.2);
-            color: inherit;
-            font-family: inherit;
-            outline: none;
-            margin-bottom: 6px;
         }
         .task-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
         }
-        .task-table th,
-        .task-table td {
+        .task-table th, .task-table td {
             padding: 10px 12px;
             text-align: left;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .task-table th {
-            font-weight: 600;
-            color: var(--text-secondary);
         }
         .end-task-btn {
             background: #ef4444;
@@ -904,13 +682,6 @@
             border-radius: 30px;
             color: white;
             cursor: pointer;
-            font-weight: 500;
-            transition: all var(--transition-fast);
-            font-family: inherit;
-        }
-        .end-task-btn:hover {
-            box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
-            transform: scale(1.04);
         }
         .sysinfo {
             display: flex;
@@ -923,23 +694,16 @@
             padding: 9px 18px;
             border-radius: 40px;
             font-size: 12px;
-            font-weight: 500;
-            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        /* ----- Terminal محسّن ----- */
+        /* Terminal */
         .terminal {
             background: transparent !important;
             color: inherit !important;
             font-family: 'JetBrains Mono', monospace !important;
             font-size: 13px !important;
         }
-        .terminal .terminal-output {
-            color: var(--text-color) !important;
-        }
-        .terminal .cmd {
-            color: #5effbc !important;
-        }
+        .terminal .cmd { color: #5effbc !important; }
 
         /* Sortable drag effect */
         .sortable-drag {
@@ -953,41 +717,20 @@
             border: 1px dashed rgba(255, 255, 255, 0.3) !important;
         }
 
-        /* Responsive صغير */
         @media (max-width: 600px) {
-            .desktop-icon {
-                width: 70px;
-                min-width: 60px;
-                padding: 10px 4px;
-            }
-            .desktop-icon i {
-                font-size: 26px;
-            }
-            .desktop-icon span {
-                font-size: 9px;
-            }
-            .window {
-                width: 95% !important;
-                height: 70% !important;
-                top: 5% !important;
-                left: 2.5% !important;
-            }
-            .explorer-sidebar {
-                width: 120px;
-            }
+            .desktop-icon { width: 70px; min-width: 60px; padding: 10px 4px; }
+            .desktop-icon i { font-size: 26px; }
+            .window { width: 95% !important; height: 70% !important; top: 5% !important; left: 2.5% !important; }
+            .explorer-sidebar { width: 120px; }
         }
     </style>
 </head>
 <body class="dark">
 
-    <!-- جسيمات خلفية (تأثير بصري هادئ) -->
     <div class="bg-particles" id="bgParticles"></div>
-
-    <!-- سطح المكتب -->
     <div class="desktop" id="desktopContainer"></div>
 
-    <!-- ========== النوافذ ========== -->
-    <!-- Terminal -->
+    <!-- النوافذ -->
     <div id="terminalWindow" class="window">
         <div class="window-header">
             <span class="window-title"><i class="fas fa-terminal"></i> Terminal</span>
@@ -1000,7 +743,6 @@
         <div id="terminal" class="window-body"></div>
     </div>
 
-    <!-- File Manager -->
     <div id="explorerWindow" class="window">
         <div class="window-header">
             <span class="window-title"><i class="fas fa-folder-tree"></i> File Manager</span>
@@ -1019,7 +761,6 @@
         </div>
     </div>
 
-    <!-- File Viewer -->
     <div id="fileViewer" class="window" style="width:520px; height:420px;">
         <div class="window-header">
             <span class="window-title" id="fileViewerTitle"><i class="fas fa-file-alt"></i> File Viewer</span>
@@ -1029,10 +770,9 @@
                 <button class="close-btn"><i class="fas fa-times"></i></button>
             </div>
         </div>
-        <div class="window-body"><pre id="fileViewerContent" style="white-space:pre-wrap; font-family:'JetBrains Mono',monospace; font-size:13px;"></pre></div>
+        <div class="window-body"><pre id="fileViewerContent" style="white-space:pre-wrap; font-family:monospace;"></pre></div>
     </div>
 
-    <!-- Nano Editor -->
     <div id="nanoEditor" class="window" style="width:720px; height:520px;">
         <div class="window-header">
             <span class="window-title"><i class="fas fa-edit"></i> Nano Editor</span>
@@ -1043,15 +783,14 @@
             </div>
         </div>
         <div class="window-body" style="display:flex; flex-direction:column;">
-            <textarea id="nanoTextArea" style="width:100%; height:75%; padding:14px; border-radius:16px; background:rgba(0,0,0,0.2); color:inherit; border:1px solid rgba(255,255,255,0.1); font-family:'JetBrains Mono',monospace; font-size:13px; resize:vertical; outline:none;"></textarea>
-            <div style="margin-top:12px; display:flex; gap:8px;">
-                <button onclick="saveNanoFile()" style="background:var(--accent); border:none; padding:8px 22px; border-radius:40px; color:white; cursor:pointer; font-weight:600; font-family:inherit;">💾 Save</button>
-                <button onclick="closeWindow('nanoEditor')" style="background:rgba(255,255,255,0.1); border:none; padding:8px 22px; border-radius:40px; color:inherit; cursor:pointer; font-weight:500; font-family:inherit;">Cancel</button>
+            <textarea id="nanoTextArea" style="width:100%; height:75%; padding:14px; border-radius:16px; background:rgba(0,0,0,0.2); color:inherit; border:1px solid rgba(255,255,255,0.1); font-family:monospace;"></textarea>
+            <div style="margin-top:12px;">
+                <button onclick="saveNanoFile()" style="background:var(--accent); border:none; padding:8px 22px; border-radius:40px; color:white;">💾 Save</button>
+                <button onclick="closeWindow('nanoEditor')" style="background:rgba(255,255,255,0.1); border:none; padding:8px 22px; border-radius:40px;">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- Calculator -->
     <div id="calculatorWindow" class="window" style="width:370px; height:520px;">
         <div class="window-header">
             <span class="window-title"><i class="fas fa-calculator"></i> Calculator</span>
@@ -1064,7 +803,6 @@
         <div class="window-body calculator" id="calculatorApp"></div>
     </div>
 
-    <!-- Snake Game -->
     <div id="snakeWindow" class="window" style="width:530px; height:590px;">
         <div class="window-header">
             <span class="window-title"><i class="fas fa-gamepad"></i> Snake Game</span>
@@ -1077,7 +815,6 @@
         <div class="window-body snake-game" id="snakeApp"></div>
     </div>
 
-    <!-- Task Manager -->
     <div id="taskManagerWindow" class="window" style="width:660px; height:520px;">
         <div class="window-header">
             <span class="window-title"><i class="fas fa-tachometer-alt"></i> Task Manager</span>
@@ -1090,7 +827,6 @@
         <div class="window-body" id="taskManagerBody"></div>
     </div>
 
-    <!-- Settings -->
     <div id="settingsWindow" class="window" style="width:560px; height:560px;">
         <div class="window-header">
             <span class="window-title"><i class="fas fa-cog"></i> Settings</span>
@@ -1103,14 +839,14 @@
         <div class="window-body" id="settingsBody"></div>
     </div>
 
-    <!-- ========== شريط المهام ========== -->
+    <!-- شريط المهام -->
     <div class="taskbar">
         <div class="start-button" id="startButton"><i class="fas fa-window-maximize"></i> CyberOS</div>
         <div class="taskbar-icons" id="taskbarIcons"></div>
         <div class="taskbar-time" id="clock"><i class="fas fa-clock"></i> <span id="clockText"></span></div>
     </div>
 
-    <!-- ========== قائمة ابدأ ========== -->
+    <!-- قائمة ابدأ -->
     <div id="startMenu" class="start-menu">
         <div class="start-header"><i class="fas fa-desktop"></i> CyberOS</div>
         <div class="start-items">
@@ -1129,7 +865,7 @@
 
     <script>
         (function() {
-            // ========== إعداد الجسيمات الخلفية ==========
+            // جسيمات الخلفية
             const particlesContainer = document.getElementById('bgParticles');
             for (let i = 0; i < 18; i++) {
                 const particle = document.createElement('div');
@@ -1144,7 +880,7 @@
                 particlesContainer.appendChild(particle);
             }
 
-            // ========== جميع النوافذ ==========
+            // إدارة النوافذ
             const allWindows = [
                 'terminalWindow', 'explorerWindow', 'fileViewer', 'nanoEditor',
                 'calculatorWindow', 'snakeWindow', 'taskManagerWindow', 'settingsWindow'
@@ -1152,10 +888,7 @@
             let windowStates = {};
             let nextZ = 1100;
 
-            function bringToFront(id) {
-                windowStates[id].element.style.zIndex = ++nextZ;
-            }
-
+            function bringToFront(id) { windowStates[id].element.style.zIndex = ++nextZ; }
             function openWindow(id) {
                 const s = windowStates[id];
                 if (s) {
@@ -1163,14 +896,9 @@
                     s.minimized = false;
                     s.element.style.display = 'flex';
                     bringToFront(id);
-                    // re-trigger animation
-                    s.element.style.animation = 'none';
-                    s.element.offsetHeight;
-                    s.element.style.animation = 'windowOpen 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
                     updateTaskbar();
                 }
             }
-
             function closeWindow(id) {
                 const s = windowStates[id];
                 if (s) {
@@ -1180,7 +908,6 @@
                     updateTaskbar();
                 }
             }
-
             function minimizeWindow(id) {
                 const s = windowStates[id];
                 if (s && s.visible) {
@@ -1189,7 +916,6 @@
                     updateTaskbar();
                 }
             }
-
             function restoreWindow(id) {
                 const s = windowStates[id];
                 if (s) {
@@ -1200,7 +926,6 @@
                     updateTaskbar();
                 }
             }
-
             function updateTaskbar() {
                 const container = document.getElementById('taskbarIcons');
                 container.innerHTML = '';
@@ -1213,19 +938,13 @@
                         icon.title = s.title;
                         icon.addEventListener('click', () => {
                             if (s.minimized) restoreWindow(id);
-                            else if (s.element.style.zIndex == nextZ && !s.minimized) minimizeWindow(
-                                id);
-                            else {
-                                bringToFront(id);
-                                if (s.minimized) restoreWindow(id);
-                            }
+                            else minimizeWindow(id);
                         });
                         container.appendChild(icon);
                     }
                 }
             }
 
-            // تهيئة النوافذ
             allWindows.forEach(id => {
                 const win = document.getElementById(id);
                 if (win) {
@@ -1239,11 +958,8 @@
                     const minBtn = win.querySelector('.minimize-btn');
                     const maxBtn = win.querySelector('.maximize-btn');
 
-                    if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation();
-                        closeWindow(id); });
-                    if (minBtn) minBtn.addEventListener('click', (e) => { e.stopPropagation();
-                        minimizeWindow(id); });
-
+                    if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeWindow(id); });
+                    if (minBtn) minBtn.addEventListener('click', (e) => { e.stopPropagation(); minimizeWindow(id); });
                     if (maxBtn) {
                         let isMax = false;
                         maxBtn.addEventListener('click', (e) => {
@@ -1260,10 +976,9 @@
                         });
                     }
 
-                    // السحب
+                    // جعل النافذة قابلة للسحب
                     const header = win.querySelector('.window-header');
-                    let offsetX, offsetY,
-                        isDragging = false;
+                    let offsetX, offsetY, isDragging = false;
                     header.addEventListener('mousedown', (e) => {
                         if (win.classList.contains('maximized')) return;
                         isDragging = true;
@@ -1277,8 +992,7 @@
                         if (!isDragging) return;
                         let newLeft = e.clientX - offsetX;
                         let newTop = e.clientY - offsetY;
-                        newLeft = Math.min(Math.max(newLeft, -win.offsetWidth + 80), window
-                            .innerWidth - 80);
+                        newLeft = Math.min(Math.max(newLeft, -win.offsetWidth + 80), window.innerWidth - 80);
                         newTop = Math.min(Math.max(newTop, 0), window.innerHeight - 80);
                         win.style.left = newLeft + 'px';
                         win.style.top = newTop + 'px';
@@ -1287,13 +1001,11 @@
                         isDragging = false;
                         if (header) header.style.cursor = 'grab';
                     });
-
-                    // النقر على النافذة يجلبها للأمام
                     win.addEventListener('mousedown', () => bringToFront(id));
                 }
             });
 
-            // ========== نظام الملفات الافتراضي (VFS) مع My Computer ==========
+            // نظام الملفات الافتراضي مع إضافة README.md و readme.txt
             let fileSystem = {
                 "/": {
                     type: "dir",
@@ -1309,10 +1021,7 @@
                                         "Windows": { type: "dir", content: {} },
                                         "Program Files": { type: "dir", content: {} },
                                         "Users": { type: "dir", content: {} },
-                                        "system.info": {
-                                            type: "file",
-                                            content: "C: Drive - System volume - CyberOS"
-                                        }
+                                        "system.info": { type: "file", content: "C: Drive - System volume - CyberOS" }
                                     }
                                 },
                                 "Documents (D:)": {
@@ -1320,25 +1029,20 @@
                                     content: {
                                         "Projects": { type: "dir", content: {} },
                                         "Media": { type: "dir", content: {} },
-                                        "readme.txt": {
-                                            type: "file",
-                                            content: "Welcome to My Computer! You can store files and folders here."
-                                        }
+                                        "readme.txt": { type: "file", content: "Welcome to My Computer! You can store files and folders here." }
                                     }
                                 },
-                                "Network Drive": {
-                                    type: "dir",
-                                    content: {}
-                                },
-                                "computer_info.txt": {
-                                    type: "file",
-                                    content: "CyberOS My Computer\nVirtual File System\nCPU: CyberCore v2.4\nRAM: 8 GB"
-                                }
+                                "Network Drive": { type: "dir", content: {} },
+                                "computer_info.txt": { type: "file", content: "CyberOS My Computer\nVirtual File System\nCPU: CyberCore v2.4\nRAM: 8 GB" }
                             }
+                        },
+                        "README.md": {
+                            type: "file",
+                            content: "# CyberOS Desktop Simulator\n\n## Team Members:\n- Abdullah (Leader)\n- Abdalrahman\n- Ahmed Ezzat\n- Karim Khaled\n- Ziad Yasser\n- Mohamed AbdElkhaleq\n- Hazem Samir\n- Ahmed Saad\n- Karim Mohamed\n- Ahmed Mostafa\n- Ahmed AbdElnaser\n- Belal\n- Ziad Hany\n- Ziad Youssef\n- Ahmed Salah\n\n## Features:\n- Full Desktop Environment\n- Terminal with commands (ls, cd, mkdir, touch, rm, pwd, clear, cat, nano, help, exit)\n- File Manager with Context Menu (Right-click)\n- Drag & Drop icons on desktop\n- Calculator & Snake Game\n- Task Manager & Settings (Dark/Light mode, Wallpaper)\n- Boot screen & Login (admin/0)\n\n## How to Run:\nOpen index.html in a modern browser.\n\n---\nCyberOS Team"
                         },
                         "readme.txt": {
                             type: "file",
-                            content: "CyberOS - Right-click to create new files/folders.\nUse 'help' in terminal for commands."
+                            content: "CyberOS - Virtual Operating System\n================================\n\nThis is a desktop simulator that runs entirely in the browser.\n\nCommands:\n  ls          → List files/folders\n  cd <dir>    → Change directory\n  mkdir <name>→ Create folder\n  touch <file>→ Create empty file\n  rm <name>   → Delete file/folder\n  pwd         → Show current path\n  clear       → Clear screen\n  cat <file>  → View file content\n  nano <file> → Edit/Create file\n  help        → Show this help\n  exit        → Close terminal\n\nRight-click on desktop or inside File Manager to create, copy, paste, rename, delete.\n\nEnjoy!\n-- Team CyberOS"
                         }
                     }
                 },
@@ -1352,22 +1056,15 @@
                 "/docs": {
                     type: "dir",
                     content: {
-                        "manual.txt": {
-                            type: "file",
-                            content: "Commands: ls, cd, mkdir, touch, rm, pwd, clear, cat, nano, help"
-                        }
+                        "manual.txt": { type: "file", content: "Commands: ls, cd, mkdir, touch, rm, pwd, clear, cat, nano, help, exit" }
                     }
                 }
             };
 
-            // تأكد من وجود سطح المكتب
-            if (!fileSystem["/home"].content["Desktop"]) {
-                fileSystem["/home"].content["Desktop"] = { type: "dir", content: {} };
-            }
+            if (!fileSystem["/home"].content["Desktop"]) fileSystem["/home"].content["Desktop"] = { type: "dir", content: {} };
             const desktopFolder = fileSystem["/home"].content["Desktop"];
             if (Object.keys(desktopFolder.content).length === 0) {
-                desktopFolder.content["example.txt"] = { type: "file",
-                content: "Example file - you can delete or edit me." };
+                desktopFolder.content["example.txt"] = { type: "file", content: "Example file - you can delete or edit me." };
                 desktopFolder.content["notes.txt"] = { type: "file", content: "Your notes here..." };
                 desktopFolder.content["Projects"] = { type: "dir", content: {} };
             }
@@ -1399,8 +1096,7 @@
 
             function refreshUI() {
                 renderDesktop();
-                if (windowStates['explorerWindow'].visible && !windowStates['explorerWindow'].minimized)
-                    renderExplorer();
+                if (windowStates['explorerWindow'].visible && !windowStates['explorerWindow'].minimized) renderExplorer();
             }
 
             function showModal(title, defaultValue, callback) {
@@ -1419,17 +1115,11 @@
                 const input = modal.querySelector('#modalInput');
                 input.focus();
                 input.select();
-                modal.querySelector('#modalOk').onclick = () => { const val = input.value;
-                    modal.remove();
-                    callback(val); };
-                modal.querySelector('#modalCancel').onclick = () => { modal.remove();
-                    callback(null); };
+                modal.querySelector('#modalOk').onclick = () => { const val = input.value; modal.remove(); callback(val); };
+                modal.querySelector('#modalCancel').onclick = () => { modal.remove(); callback(null); };
                 input.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') { const val = input.value;
-                        modal.remove();
-                        callback(val); }
-                    if (e.key === 'Escape') { modal.remove();
-                        callback(null); }
+                    if (e.key === 'Enter') { const val = input.value; modal.remove(); callback(val); }
+                    if (e.key === 'Escape') { modal.remove(); callback(null); }
                 });
             }
 
@@ -1446,31 +1136,21 @@
                         </div>
                     </div>`;
                 document.body.appendChild(modal);
-                modal.querySelector('#modalYes').onclick = () => { modal.remove();
-                    callback(true); };
-                modal.querySelector('#modalCancel').onclick = () => { modal.remove();
-                    callback(false); };
+                modal.querySelector('#modalYes').onclick = () => { modal.remove(); callback(true); };
+                modal.querySelector('#modalCancel').onclick = () => { modal.remove(); callback(false); };
             }
 
-            // ========== عرض سطح المكتب ==========
+            // عرض سطح المكتب مع SortableJS
             let sortableInstance = null;
 
             function renderDesktop() {
                 const container = document.getElementById("desktopContainer");
                 container.innerHTML = "";
 
-                // أيقونات ثابتة
                 const fixedIcons = [
-                    { name: "My Computer", icon: "fas fa-desktop", cls: "my-computer", action: () => { currentPath =
-                                "/mycomputer";
-                            openWindow('explorerWindow');
-                            renderExplorer(); } },
-                    { name: "Terminal", icon: "fas fa-terminal", cls: "terminal-icon", action: () =>
-                        openWindow('terminalWindow') },
-                    { name: "Documents", icon: "fas fa-folder-open", cls: "documents-icon", action: () => { currentPath =
-                                "/docs";
-                            openWindow('explorerWindow');
-                            renderExplorer(); } }
+                    { name: "My Computer", icon: "fas fa-desktop", cls: "my-computer", action: () => { currentPath = "/mycomputer"; openWindow('explorerWindow'); renderExplorer(); } },
+                    { name: "Terminal", icon: "fas fa-terminal", cls: "terminal-icon", action: () => openWindow('terminalWindow') },
+                    { name: "Documents", icon: "fas fa-folder-open", cls: "documents-icon", action: () => { currentPath = "/docs"; openWindow('explorerWindow'); renderExplorer(); } }
                 ];
 
                 fixedIcons.forEach(ic => {
@@ -1480,11 +1160,9 @@
                     div.setAttribute("data-sortable", "false");
                     div.innerHTML = `<i class="${ic.icon}"></i><span>${ic.name}</span>`;
                     div.addEventListener('click', ic.action);
-                    div.addEventListener('dblclick', ic.action);
                     container.appendChild(div);
                 });
 
-                // عناصر سطح المكتب من VFS
                 const desk = fileSystem["/home"].content["Desktop"];
                 if (desk && desk.content) {
                     Object.keys(desk.content).forEach(name => {
@@ -1493,21 +1171,9 @@
                         div.className = "desktop-icon";
                         div.setAttribute("data-id", name);
                         const iconClass = item.type === "dir" ? "fas fa-folder" : "fas fa-file-alt";
-                        const iconColor = item.type === "dir" ? 'color:var(--icon-folder);' :
-                            'color:var(--icon-file);';
-                        div.innerHTML =
-                            `<i class="${iconClass}" style="${iconColor}"></i><span>${name}</span>`;
+                        const iconColor = item.type === "dir" ? 'color:var(--icon-folder);' : 'color:var(--icon-file);';
+                        div.innerHTML = `<i class="${iconClass}" style="${iconColor}"></i><span>${name}</span>`;
                         div.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            if (item.type === "dir") {
-                                currentPath = "/home/Desktop/" + name;
-                                openWindow('explorerWindow');
-                                renderExplorer();
-                            } else {
-                                openFileViewer("/home/Desktop/" + name, item.content, name);
-                            }
-                        });
-                        div.addEventListener('dblclick', (e) => {
                             e.stopPropagation();
                             if (item.type === "dir") {
                                 currentPath = "/home/Desktop/" + name;
@@ -1520,15 +1186,13 @@
                         div.oncontextmenu = (e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            showContextMenu(e.clientX, e.clientY, name, item.type, "/home/Desktop/" +
-                                name, true);
+                            showContextMenu(e.clientX, e.clientY, name, item.type, "/home/Desktop/" + name, true);
                             return false;
                         };
                         container.appendChild(div);
                     });
                 }
 
-                // Sortable
                 if (sortableInstance) sortableInstance.destroy();
                 sortableInstance = new Sortable(container, {
                     animation: 200,
@@ -1540,33 +1204,27 @@
                         const order = [];
                         document.querySelectorAll('.desktop-icon').forEach(el => {
                             const name = el.querySelector('span')?.innerText;
-                            if (name && !["My Computer", "Terminal", "Documents"].includes(
-                                    name)) {
-                                order.push(name);
-                            }
+                            if (name && !["My Computer", "Terminal", "Documents"].includes(name)) order.push(name);
                         });
                         localStorage.setItem('desktopOrder', JSON.stringify(order));
                     }
                 });
 
-                // استعادة الترتيب
                 const savedOrder = localStorage.getItem('desktopOrder');
                 if (savedOrder) {
                     const order = JSON.parse(savedOrder);
                     const children = Array.from(container.children);
                     for (const name of order) {
-                        const found = children.find(child => child.querySelector('span')?.innerText ===
-                            name);
+                        const found = children.find(child => child.querySelector('span')?.innerText === name);
                         if (found) container.appendChild(found);
                     }
                 }
             }
 
-            // ========== قائمة السياق ==========
+            // قائمة السياق (تعمل على سطح المكتب وداخل المستكشف)
             let activeMenu = null;
 
-            function removeMenu() { if (activeMenu) { activeMenu.remove();
-                    activeMenu = null; } }
+            function removeMenu() { if (activeMenu) { activeMenu.remove(); activeMenu = null; } }
 
             function showContextMenu(x, y, targetName, targetType, targetPath, isDesktop) {
                 removeMenu();
@@ -1574,40 +1232,27 @@
                 menu.className = "context-menu";
                 let html = '';
                 if (targetName) {
-                    html +=
-                        '<div class="context-menu-item" id="cm-open"><i class="fas fa-eye"></i> Open</div>';
-                    if (targetType === "file")
-                        html +=
-                        '<div class="context-menu-item" id="cm-edit"><i class="fas fa-edit"></i> Edit</div>';
-                    html +=
-                        '<div class="context-menu-item" id="cm-copy"><i class="fas fa-copy"></i> Copy</div>';
-                    if (clipboard)
-                        html +=
-                        '<div class="context-menu-item" id="cm-paste"><i class="fas fa-paste"></i> Paste</div>';
-                    html +=
-                        '<div class="context-menu-item" id="cm-rename"><i class="fas fa-pen"></i> Rename</div>';
-                    html +=
-                        '<div class="context-menu-item" id="cm-delete"><i class="fas fa-trash"></i> Delete</div><hr>';
+                    html += '<div class="context-menu-item" id="cm-open"><i class="fas fa-eye"></i> Open</div>';
+                    if (targetType === "file") html += '<div class="context-menu-item" id="cm-edit"><i class="fas fa-edit"></i> Edit</div>';
+                    html += '<div class="context-menu-item" id="cm-copy"><i class="fas fa-copy"></i> Copy</div>';
+                    if (clipboard) html += '<div class="context-menu-item" id="cm-paste"><i class="fas fa-paste"></i> Paste</div>';
+                    html += '<div class="context-menu-item" id="cm-rename"><i class="fas fa-pen"></i> Rename</div>';
+                    html += '<div class="context-menu-item" id="cm-delete"><i class="fas fa-trash"></i> Delete</div><hr>';
                 }
-                html +=
-                    '<div class="context-menu-item" id="cm-newfolder"><i class="fas fa-folder-plus"></i> New Folder</div>';
-                html +=
-                    '<div class="context-menu-item" id="cm-newfile"><i class="fas fa-file-plus"></i> New File</div>';
+                html += '<div class="context-menu-item" id="cm-newfolder"><i class="fas fa-folder-plus"></i> New Folder</div>';
+                html += '<div class="context-menu-item" id="cm-newfile"><i class="fas fa-file-plus"></i> New File</div>';
                 menu.innerHTML = html;
                 document.body.appendChild(menu);
 
-                // ضبط الموضع
                 const menuRect = menu.getBoundingClientRect();
-                let finalX = x;
-                let finalY = y;
+                let finalX = x, finalY = y;
                 if (finalX + menuRect.width > window.innerWidth) finalX = window.innerWidth - menuRect.width - 10;
                 if (finalY + menuRect.height > window.innerHeight) finalY = window.innerHeight - menuRect.height - 10;
                 menu.style.left = Math.max(5, finalX) + "px";
                 menu.style.top = Math.max(5, finalY) + "px";
                 activeMenu = menu;
 
-                const getItem = () => isDesktop ? fileSystem["/home"].content["Desktop"].content[
-                    targetName] : getCurrentFolder()?.content[targetName];
+                const getItem = () => isDesktop ? fileSystem["/home"].content["Desktop"].content[targetName] : getCurrentFolder()?.content[targetName];
                 const deleteItem = () => {
                     if (isDesktop) delete fileSystem["/home"].content["Desktop"].content[targetName];
                     else { const cur = getCurrentFolder(); if (cur) delete cur.content[targetName]; }
@@ -1639,55 +1284,43 @@
                     document.getElementById("cm-open")?.addEventListener("click", () => {
                         if (targetType === "dir") {
                             if (isDesktop) currentPath = "/home/Desktop/" + targetName;
-                            else currentPath = currentPath === "/" ? "/" + targetName :
-                                currentPath + "/" + targetName;
+                            else currentPath = currentPath === "/" ? "/" + targetName : currentPath + "/" + targetName;
                             openWindow('explorerWindow');
                             renderExplorer();
                         } else openFileViewer(targetPath, getItem()?.content, targetName);
                         removeMenu();
                     });
-                    if (targetType === "file") document.getElementById("cm-edit")?.addEventListener("click",
-                        () => { openNanoEditor(targetPath, getItem()?.content, targetName);
-                            removeMenu(); });
+                    if (targetType === "file") document.getElementById("cm-edit")?.addEventListener("click", () => { openNanoEditor(targetPath, getItem()?.content, targetName); removeMenu(); });
                     document.getElementById("cm-copy")?.addEventListener("click", () => {
                         const it = getItem();
-                        if (it) clipboard = { name: targetName, type: targetType, item: JSON.parse(JSON
-                                .stringify(it)) };
+                        if (it) clipboard = { name: targetName, type: targetType, item: JSON.parse(JSON.stringify(it)) };
                         removeMenu();
                     });
                     if (clipboard) document.getElementById("cm-paste")?.addEventListener("click", pasteHere);
                     document.getElementById("cm-rename")?.addEventListener("click", () => {
-                        showModal("Rename", targetName, (n) => { if (n) renameItem(n);
-                            removeMenu(); });
+                        showModal("Rename", targetName, (n) => { if (n) renameItem(n); removeMenu(); });
                     });
                     document.getElementById("cm-delete")?.addEventListener("click", () => {
-                        showConfirm("Delete", `Delete "${targetName}"?`, (ok) => { if (ok)
-                                deleteItem();
-                            removeMenu(); });
+                        showConfirm("Delete", `Delete "${targetName}"?`, (ok) => { if (ok) deleteItem(); removeMenu(); });
                     });
                 }
                 document.getElementById("cm-newfolder")?.addEventListener("click", () => {
                     const parent = isDesktop ? fileSystem["/home"].content["Desktop"] : getCurrentFolder();
                     showModal("New Folder", "NewFolder", (name) => {
-                        if (name && !parent.content[name]) { parent.content[name] = { type: "dir",
-                                content: {} };
-                            refreshUI(); }
+                        if (name && !parent.content[name]) { parent.content[name] = { type: "dir", content: {} }; refreshUI(); }
                         removeMenu();
                     });
                 });
                 document.getElementById("cm-newfile")?.addEventListener("click", () => {
                     const parent = isDesktop ? fileSystem["/home"].content["Desktop"] : getCurrentFolder();
                     showModal("New File", "file.txt", (name) => {
-                        if (name && !parent.content[name]) { parent.content[name] = { type: "file",
-                                content: "" };
-                            refreshUI(); }
+                        if (name && !parent.content[name]) { parent.content[name] = { type: "file", content: "" }; refreshUI(); }
                         removeMenu();
                     });
                 });
 
                 setTimeout(() => {
-                    window.addEventListener("click", function once() { removeMenu();
-                        window.removeEventListener("click", once); }, { once: true });
+                    window.addEventListener("click", function once() { removeMenu(); window.removeEventListener("click", once); }, { once: true });
                 }, 10);
             }
 
@@ -1698,16 +1331,14 @@
                 return false;
             };
 
-            // ========== دوال التطبيقات ==========
+            // دوال التطبيقات الأساسية
             function openFileViewer(path, content, name) {
-                document.getElementById('fileViewerTitle').innerHTML =
-                    `<i class="fas fa-file-alt" style="color:var(--icon-file);"></i> ${name}`;
+                document.getElementById('fileViewerTitle').innerHTML = `<i class="fas fa-file-alt"></i> ${name}`;
                 document.getElementById('fileViewerContent').innerText = content || '(empty)';
                 openWindow('fileViewer');
             }
 
             let currentNanoPath = null;
-
             function openNanoEditor(path, content, name) {
                 currentNanoPath = path;
                 document.getElementById('nanoTextArea').value = content || '';
@@ -1720,8 +1351,7 @@
                     const parts = currentNanoPath.split("/").filter(p => p);
                     let cur = fileSystem["/"];
                     for (let i = 0; i < parts.length - 1; i++) {
-                        if (cur.content[parts[i]] && cur.content[parts[i]].type === "dir") cur = cur.content[
-                            parts[i]];
+                        if (cur.content[parts[i]] && cur.content[parts[i]].type === "dir") cur = cur.content[parts[i]];
                     }
                     const fname = parts[parts.length - 1];
                     if (cur.content[fname] && cur.content[fname].type === "file") {
@@ -1733,17 +1363,10 @@
                 }
             }
 
-            function openCalculator() { initCalculator();
-                openWindow('calculatorWindow'); }
-
-            function openSnake() { initSnake();
-                openWindow('snakeWindow'); }
-
-            function openTaskManager() { renderTaskManager();
-                openWindow('taskManagerWindow'); }
-
-            function openSettings() { renderSettings();
-                openWindow('settingsWindow'); }
+            function openCalculator() { initCalculator(); openWindow('calculatorWindow'); }
+            function openSnake() { initSnake(); openWindow('snakeWindow'); }
+            function openTaskManager() { renderTaskManager(); openWindow('taskManagerWindow'); }
+            function openSettings() { renderSettings(); openWindow('settingsWindow'); }
 
             function initCalculator() {
                 const cont = document.getElementById('calculatorApp');
@@ -1771,20 +1394,19 @@
                 let cur = '';
                 const screen = document.getElementById('calcScreen');
                 cont.querySelectorAll('.calc-btn').forEach(btn => btn.addEventListener('click', () => {
-                    if (btn.dataset.val) { cur += btn.dataset.val;
-                        screen.innerText = cur; } else if (btn.dataset.op) {
+                    if (btn.dataset.val) { cur += btn.dataset.val; screen.innerText = cur; }
+                    else if (btn.dataset.op) {
                         const opMap = { '/': ' / ', '*': ' * ', '-': ' - ', '+': ' + ' };
                         cur += opMap[btn.dataset.op] || ' ' + btn.dataset.op + ' ';
                         screen.innerText = cur;
-                    } else if (btn.dataset.clear) { cur = '';
-                        screen.innerText = '0'; } else if (btn.dataset.eval) {
+                    } else if (btn.dataset.clear) { cur = ''; screen.innerText = '0'; }
+                    else if (btn.dataset.eval) {
                         try {
                             const expr = cur.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
                             const res = eval(expr);
                             screen.innerText = res;
                             cur = res.toString();
-                        } catch (e) { screen.innerText = 'Error';
-                            cur = ''; }
+                        } catch (e) { screen.innerText = 'Error'; cur = ''; }
                     }
                 }));
             }
@@ -1799,18 +1421,14 @@
                     <div class="snake-score">🐍 Score: <span id="snakeScore">0</span></div>
                     <canvas id="snakeCanvas" width="400" height="400"></canvas>
                     <div>
-                        <button id="startSnakeBtn" style="margin-top:12px; padding:9px 24px; border-radius:40px; background:var(--accent); color:white; border:none; cursor:pointer; font-weight:600; font-family:inherit;">Start Game</button>
+                        <button id="startSnakeBtn" style="margin-top:12px; padding:9px 24px; border-radius:40px; background:var(--accent); color:white; border:none; cursor:pointer;">Start Game</button>
                     </div>`;
                 const canvas = document.getElementById('snakeCanvas');
                 const ctx = canvas.getContext('2d');
-                let snake = [{ x: 200, y: 200 }],
-                    dir = 'RIGHT',
-                    food = { x: 100, y: 100 },
-                    score = 0;
+                let snake = [{ x: 200, y: 200 }], dir = 'RIGHT', food = { x: 100, y: 100 }, score = 0;
 
                 function draw() {
-                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--snake-bg').trim() ||
-                        '#0f1724';
+                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--snake-bg').trim() || '#0f1724';
                     ctx.fillRect(0, 0, 400, 400);
                     ctx.fillStyle = '#ffcc88';
                     ctx.fillRect(food.x, food.y, 20, 20);
@@ -1827,12 +1445,10 @@
                     if (head.x === food.x && head.y === food.y) {
                         score++;
                         document.getElementById('snakeScore').innerText = score;
-                        food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) *
-                                20 };
+                        food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
                     } else snake.pop();
                     snake.unshift(head);
-                    if (head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snake.slice(1).some(s => s
-                            .x === head.x && s.y === head.y)) {
+                    if (head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snake.slice(1).some(s => s.x === head.x && s.y === head.y)) {
                         clearInterval(snakeGameLoop);
                         snakeRunning = false;
                         document.getElementById('snakeScore').innerText = score + " — Game Over";
@@ -1860,16 +1476,14 @@
                     if (e.key === 'ArrowUp' && dir !== 'DOWN') dir = 'UP';
                     if (e.key === 'ArrowDown' && dir !== 'UP') dir = 'DOWN';
                 });
-
                 draw();
             }
 
-            // ========== مستكشف الملفات ==========
+            // مستكشف الملفات مع قائمة سياق كاملة
             function renderExplorer() {
                 const cur = getCurrentFolder();
                 if (!cur) return;
-                document.getElementById("explorerPath").innerHTML =
-                    `<i class="fas fa-folder-open" style="color:var(--icon-folder);"></i> ${currentPath}`;
+                document.getElementById("explorerPath").innerHTML = `<i class="fas fa-folder-open"></i> ${currentPath}`;
                 document.getElementById("explorerSidebar").innerHTML = `
                     <div onclick="navigateTo('/')"><i class="fas fa-home"></i> Root</div>
                     <div onclick="navigateTo('/mycomputer')"><i class="fas fa-desktop"></i> My Computer</div>
@@ -1882,16 +1496,14 @@
                 if (currentPath !== "/") {
                     const up = document.createElement("div");
                     up.className = "explorer-item";
-                    up.innerHTML = '<i class="fas fa-level-up-alt" style="color:var(--icon-system);"></i><span>.. (Up)</span>';
+                    up.innerHTML = '<i class="fas fa-level-up-alt"></i><span>.. (Up)</span>';
                     up.addEventListener('click', () => {
                         const parts = currentPath.split("/").filter(p => p);
                         parts.pop();
                         currentPath = parts.length ? "/" + parts.join("/") : "/";
                         renderExplorer();
                     });
-                    up.oncontextmenu = (e) => { e.preventDefault();
-                        e.stopPropagation();
-                        showContextMenu(e.clientX, e.clientY, null, null, null, false); return false; };
+                    up.oncontextmenu = (e) => { e.preventDefault(); e.stopPropagation(); showContextMenu(e.clientX, e.clientY, null, null, null, false); return false; };
                     grid.appendChild(up);
                 }
 
@@ -1903,40 +1515,28 @@
                     empty.style.textAlign = "center";
                     empty.style.color = "var(--text-secondary)";
                     empty.innerText = "📂 This folder is empty — Right-click to create a file/folder.";
-                    empty.oncontextmenu = (e) => { e.preventDefault();
-                        showContextMenu(e.clientX, e.clientY, null, null, null, false); return false; };
+                    empty.oncontextmenu = (e) => { e.preventDefault(); showContextMenu(e.clientX, e.clientY, null, null, null, false); return false; };
                     grid.appendChild(empty);
                 } else {
                     items.forEach(name => {
                         const item = cur.content[name];
                         const div = document.createElement("div");
                         div.className = "explorer-item";
-                        const iconColor = item.type === "dir" ? 'color:var(--icon-folder);' :
-                            'color:var(--icon-file);';
+                        const iconColor = item.type === "dir" ? 'color:var(--icon-folder);' : 'color:var(--icon-file);';
                         const icon = item.type === "dir" ? 'fas fa-folder' : 'fas fa-file-alt';
                         div.innerHTML = `<i class="${icon}" style="font-size:38px;${iconColor}"></i><span>${name}</span>`;
-                        const fullPath = currentPath === "/" ? "/" + name : currentPath + "/" +
-                            name;
+                        const fullPath = currentPath === "/" ? "/" + name : currentPath + "/" + name;
                         if (item.type === "file") {
-                            div.addEventListener('click', () => openFileViewer(fullPath, item
-                                .content, name));
-                            div.addEventListener('dblclick', () => openFileViewer(fullPath,
-                                item.content, name));
+                            div.addEventListener('click', () => openFileViewer(fullPath, item.content, name));
                         } else {
                             div.addEventListener('click', () => {
-                                if (folderExists(fullPath)) { currentPath = fullPath;
-                                    renderExplorer(); }
-                            });
-                            div.addEventListener('dblclick', () => {
-                                if (folderExists(fullPath)) { currentPath = fullPath;
-                                    renderExplorer(); }
+                                if (folderExists(fullPath)) { currentPath = fullPath; renderExplorer(); }
                             });
                         }
                         div.oncontextmenu = (e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            showContextMenu(e.clientX, e.clientY, name, item.type, fullPath,
-                                false);
+                            showContextMenu(e.clientX, e.clientY, name, item.type, fullPath, false);
                             return false;
                         };
                         grid.appendChild(div);
@@ -1953,11 +1553,10 @@
             }
 
             window.navigateTo = function(path) {
-                if (folderExists(path)) { currentPath = path;
-                    renderExplorer(); }
+                if (folderExists(path)) { currentPath = path; renderExplorer(); }
             };
 
-            // ========== Task Manager ==========
+            // Task Manager
             function renderTaskManager() {
                 const body = document.getElementById('taskManagerBody');
                 let html = `
@@ -1970,8 +1569,7 @@
                     const s = windowStates[id];
                     if (s.visible) {
                         const status = s.minimized ? "Minimized" : "Running";
-                        html +=
-                            `<tr><td><i class="fas fa-window-restore"></i> ${s.title}</td><td>${status}</td><td><button class="end-task-btn" onclick="closeWindow('${id}')">End Task</button></td></tr>`;
+                        html += `<tr><td><i class="fas fa-window-restore"></i> ${s.title}</td><td>${status}</td><td><button class="end-task-btn" onclick="closeWindow('${id}')">End Task</button></td></tr>`;
                     }
                 }
                 html += `</tbody></table></div>
@@ -1986,7 +1584,7 @@
                 body.innerHTML = html;
             }
 
-            // ========== الإعدادات ==========
+            // الإعدادات
             function renderSettings() {
                 const body = document.getElementById('settingsBody');
                 const currentUser = localStorage.getItem('cyberos-user') || 'admin';
@@ -1998,7 +1596,7 @@
                         <input type="text" id="settingsUsername" value="${currentUser}">
                         <label>Password:</label>
                         <input type="password" id="settingsPassword" value="${currentPass}">
-                        <button id="saveAccountBtn" style="margin-top:10px;">💾 Save Changes</button>
+                        <button id="saveAccountBtn">💾 Save Changes</button>
                     </div>
                     <div class="settings-card">
                         <h4><i class="fas fa-palette"></i> Appearance</h4>
@@ -2007,16 +1605,9 @@
                     </div>
                     <div class="settings-card">
                         <h4><i class="fas fa-image"></i> Wallpaper</h4>
-                        <input type="file" id="wallpaperInput" accept="image/*" style="margin-bottom:8px; display:block;">
+                        <input type="file" id="wallpaperInput" accept="image/*">
                         <button id="resetWallpaperBtn">🔄 Reset to Default</button>
-                    </div>
-                    <div class="settings-card">
-                        <h4><i class="fas fa-language"></i> Language</h4>
-                        <button id="langArBtn">العربية</button>
-                        <button id="langEnBtn">English</button>
-                        <div id="langPreview" style="margin-top:10px; font-size:12px; color:var(--text-secondary);">Current Language: العربية</div>
                     </div>`;
-
                 document.getElementById('saveAccountBtn').onclick = () => {
                     const newUser = document.getElementById('settingsUsername').value;
                     const newPass = document.getElementById('settingsPassword').value;
@@ -2048,36 +1639,96 @@
                 };
                 document.getElementById('resetWallpaperBtn').onclick = () => {
                     document.body.style.backgroundImage = '';
-                    document.body.style.backgroundSize = '';
-                    document.body.style.backgroundPosition = '';
                     localStorage.removeItem('cyberos-wallpaper');
-                    document.body.style.background = '';
                     if (document.body.classList.contains('light')) {
-                        document.body.style.background =
-                            'linear-gradient(145deg, #e8f0fe 0%, #d2e0f5 40%, #c8d8f0 100%)';
+                        document.body.style.background = 'linear-gradient(145deg, #e8f0fe 0%, #d2e0f5 40%, #c8d8f0 100%)';
                     } else {
-                        document.body.style.background =
-                            'radial-gradient(ellipse at 30% 20%, #0b1320 0%, #02050a 70%)';
+                        document.body.style.background = 'radial-gradient(ellipse at 30% 20%, #0b1320 0%, #02050a 70%)';
                     }
                 };
-                document.getElementById('langArBtn').onclick = () => {
-                    const texts = ['آلة حاسبة', 'لعبة الثعبان', 'الطرفية', 'مدير الملفات', 'مدير المهام', 'الإعدادات',
-                        'حول', 'إعادة تشغيل', 'إيقاف'
-                    ];
-                    const ids = ['calcStart', 'snakeStart', 'termStart', 'explorerStart', 'taskmanStart',
-                        'settingsStart', 'aboutStart', 'restartStart', 'shutdownStart'
-                    ];
-                    ids.forEach((id, i) => {
-                        const item = document.getElementById(id);
-                        if (item) item.innerHTML =
-                            `<i class="${item.querySelector('i').className}"></i> ${texts[i]}`;
-                    });
-                    document.getElementById('langPreview').innerText = 'اللغة الحالية: العربية';
-                };
-                document.getElementById('langEnBtn').onclick = () => { location.reload(); };
             }
 
-            // ========== Terminal ==========
+            // أوامر Terminal (بدون hack-check)
+            function listFiles(term) {
+                const cur = getCurrentFolder();
+                if (!cur) return;
+                const items = Object.keys(cur.content);
+                if (!items.length) term.echo("(empty)");
+                else items.forEach(i => term.echo((cur.content[i].type === "dir" ? "📁 " : "📄 ") + i));
+            }
+            function changeDirectory(path, term) {
+                if (!path) return;
+                if (path === "..") {
+                    const parts = currentPath.split("/").filter(p => p);
+                    parts.pop();
+                    currentPath = parts.length ? "/" + parts.join("/") : "/";
+                    term.echo(currentPath);
+                } else if (path === "/") {
+                    currentPath = "/";
+                    term.echo(currentPath);
+                } else {
+                    const np = currentPath === "/" ? currentPath + path : currentPath + "/" + path;
+                    if (folderExists(np)) {
+                        currentPath = np;
+                        term.echo(currentPath);
+                    } else term.echo("Not found: " + path);
+                }
+            }
+            function makeDir(name, term) {
+                if (!name) return;
+                const cur = getCurrentFolder();
+                if (!cur) return;
+                if (cur.content[name]) term.echo("Already exists");
+                else { cur.content[name] = { type: "dir", content: {} }; term.echo("Created: " + name); refreshUI(); }
+            }
+            function touchFile(name, term) {
+                if (!name) return;
+                const cur = getCurrentFolder();
+                if (!cur) return;
+                if (cur.content[name]) term.echo("Already exists");
+                else { cur.content[name] = { type: "file", content: "" }; term.echo("File created: " + name); refreshUI(); }
+            }
+            function rmItem(name, term) {
+                if (!name) return;
+                const cur = getCurrentFolder();
+                if (!cur || !cur.content[name]) term.echo("Not found");
+                else { delete cur.content[name]; term.echo("Deleted: " + name); refreshUI(); }
+            }
+            function pwdCmd(term) { term.echo(currentPath); }
+            function clearTerm(term) { term.clear(); }
+            function catFile(filename, term) {
+                if (!filename) return;
+                const cur = getCurrentFolder();
+                if (cur?.content[filename] && cur.content[filename].type === "file") term.echo(cur.content[filename].content);
+                else term.echo("Not found: " + filename);
+            }
+            function nanoFile(filename, term) {
+                if (!filename) return;
+                const cur = getCurrentFolder();
+                if (!cur) return;
+                const fp = currentPath === "/" ? currentPath + filename : currentPath + "/" + filename;
+                if (cur.content[filename] && cur.content[filename].type === "file") openNanoEditor(fp, cur.content[filename].content, filename);
+                else { cur.content[filename] = { type: "file", content: "" }; openNanoEditor(fp, "", filename); refreshUI(); }
+                term.echo("Opening nano editor...");
+            }
+            function helpCmd(term) {
+                term.echo("══════════════════════════════════════════");
+                term.echo("📖 CyberOS Terminal Commands");
+                term.echo("══════════════════════════════════════════");
+                term.echo("  ls          → List files/folders");
+                term.echo("  cd <dir>    → Change directory");
+                term.echo("  mkdir <name>→ Create folder");
+                term.echo("  touch <file>→ Create empty file");
+                term.echo("  rm <name>   → Delete file/folder");
+                term.echo("  pwd         → Show current path");
+                term.echo("  clear       → Clear screen");
+                term.echo("  cat <file>  → View file content");
+                term.echo("  nano <file> → Edit/Create file");
+                term.echo("  help        → Show this help");
+                term.echo("  exit        → Close terminal");
+                term.echo("══════════════════════════════════════════");
+            }
+
             $(document).ready(() => {
                 $('#terminal').terminal(function(cmd, term) {
                     const parts = cmd.trim().split(/\s+/);
@@ -2085,125 +1736,32 @@
                     const arg = parts.slice(1).join(" ");
                     if (c === "exit") { closeWindow('terminalWindow'); return; }
                     switch (c) {
-                        case "ls":
-                            const curLs = getCurrentFolder();
-                            if (!curLs) break;
-                            const itemsLs = Object.keys(curLs.content);
-                            if (!itemsLs.length) term.echo("(empty)");
-                            else itemsLs.forEach(i => term.echo((curLs.content[i].type === "dir" ?
-                                "📁 " : "📄 ") + i));
-                            break;
-                        case "cd":
-                            if (!arg) { term.echo(currentPath); break; }
-                            if (arg === "..") {
-                                const p = currentPath.split("/").filter(p => p);
-                                p.pop();
-                                currentPath = p.length ? "/" + p.join("/") : "/";
-                                term.echo(currentPath);
-                            } else if (arg === "/") { currentPath = "/";
-                                term.echo(currentPath); } else {
-                                const np = currentPath === "/" ? currentPath + arg : currentPath + "/" +
-                                    arg;
-                                if (folderExists(np)) { currentPath = np;
-                                    term.echo(currentPath); } else term.echo("Not found: " + arg);
-                            }
-                            break;
-                        case "mkdir":
-                            if (!arg) { term.echo("Usage: mkdir <name>"); break; }
-                            const curMk = getCurrentFolder();
-                            if (!curMk) break;
-                            if (curMk.content[arg]) term.echo("Already exists");
-                            else { curMk.content[arg] = { type: "dir", content: {} };
-                                term.echo("Created: " + arg);
-                                refreshUI(); }
-                            break;
-                        case "touch":
-                            if (!arg) { term.echo("Usage: touch <filename>"); break; }
-                            const curTch = getCurrentFolder();
-                            if (!curTch) break;
-                            if (curTch.content[arg]) term.echo("Already exists");
-                            else { curTch.content[arg] = { type: "file", content: "" };
-                                term.echo("File created: " + arg);
-                                refreshUI(); }
-                            break;
-                        case "rm":
-                            if (!arg) { term.echo("Usage: rm <name>"); break; }
-                            const curRm = getCurrentFolder();
-                            if (!curRm || !curRm.content[arg]) term.echo("Not found");
-                            else { delete curRm.content[arg];
-                                term.echo("Deleted: " + arg);
-                                refreshUI(); }
-                            break;
-                        case "pwd":
-                            term.echo(currentPath);
-                            break;
-                        case "clear":
-                            term.clear();
-                            break;
-                        case "cat":
-                            if (!arg) { term.echo("Usage: cat <file>"); break; }
-                            const curCat = getCurrentFolder();
-                            if (curCat?.content[arg] && curCat.content[arg].type === "file") term.echo(
-                                curCat.content[arg].content);
-                            else term.echo("Not found: " + arg);
-                            break;
-                        case "nano":
-                            if (!arg) { term.echo("Usage: nano <file>"); break; }
-                            const curNano = getCurrentFolder();
-                            if (!curNano) break;
-                            const fpNano = currentPath === "/" ? currentPath + arg : currentPath + "/" +
-                                arg;
-                            if (curNano.content[arg] && curNano.content[arg].type === "file")
-                                openNanoEditor(fpNano, curNano.content[arg].content, arg);
-                            else {
-                                curNano.content[arg] = { type: "file", content: "" };
-                                openNanoEditor(fpNano, "", arg);
-                                refreshUI();
-                            }
-                            term.echo("Opening nano editor...");
-                            break;
-                        case "help":
-                            term.echo("══════════════════════════════════════════");
-                            term.echo("📖 CyberOS Terminal Commands");
-                            term.echo("══════════════════════════════════════════");
-                            term.echo("  ls          → List files/folders");
-                            term.echo("  cd <dir>    → Change directory");
-                            term.echo("  mkdir <name>→ Create folder");
-                            term.echo("  touch <file>→ Create empty file");
-                            term.echo("  rm <name>   → Delete file/folder");
-                            term.echo("  pwd         → Show current path");
-                            term.echo("  clear       → Clear screen");
-                            term.echo("  cat <file>  → View file content");
-                            term.echo("  nano <file> → Edit/Create file");
-                            term.echo("  help        → Show this help");
-                            term.echo("  exit        → Close terminal");
-                            term.echo("══════════════════════════════════════════");
-                            break;
-                        default:
-                            term.echo("Unknown command. Type 'help' for available commands.");
+                        case "ls": listFiles(term); break;
+                        case "cd": changeDirectory(arg, term); break;
+                        case "mkdir": makeDir(arg, term); break;
+                        case "touch": touchFile(arg, term); break;
+                        case "rm": rmItem(arg, term); break;
+                        case "pwd": pwdCmd(term); break;
+                        case "clear": clearTerm(term); break;
+                        case "cat": catFile(arg, term); break;
+                        case "nano": nanoFile(arg, term); break;
+                        case "help": helpCmd(term); break;
+                        default: term.echo("Unknown command. Type 'help'");
                     }
                 }, {
-                    greetings: "CyberOS Terminal v2.4 — Type 'help' for commands.",
-                    prompt: cb => cb(currentPath + " $ "),
-                    completion: true,
-                    keydown: function(e) {
-                        if (e.ctrlKey && e.key === 'l') {
-                            this.clear();
-                            return false;
-                        }
-                    }
+                    greetings: "CyberOS Terminal — Type 'help' for commands.",
+                    prompt: cb => cb(currentPath + " $ ")
                 });
             });
 
-            // ========== الساعة ==========
+            // الساعة
             function updateClock() {
-                const now = new Date();
-                document.getElementById('clockText').innerText = now.toLocaleTimeString();
+                document.getElementById('clockText').innerText = new Date().toLocaleTimeString();
             }
             setInterval(updateClock, 1000);
             updateClock();
 
-            // ========== قائمة ابدأ ==========
+            // قائمة ابدأ
             const startBtn = document.getElementById('startButton');
             const startMenu = document.getElementById('startMenu');
             startBtn.addEventListener('click', (e) => {
@@ -2211,37 +1769,23 @@
                 startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
             });
             document.addEventListener('click', (e) => {
-                if (!startMenu.contains(e.target) && e.target !== startBtn) startMenu.style.display =
-                    'none';
+                if (!startMenu.contains(e.target) && e.target !== startBtn) startMenu.style.display = 'none';
             });
 
-            document.getElementById('calcStart').onclick = () => { startMenu.style.display = 'none';
-                openCalculator(); };
-            document.getElementById('snakeStart').onclick = () => { startMenu.style.display = 'none';
-                openSnake(); };
-            document.getElementById('termStart').onclick = () => { startMenu.style.display = 'none';
-                openWindow('terminalWindow'); };
-            document.getElementById('explorerStart').onclick = () => { startMenu.style.display = 'none';
-                currentPath = '/';
-                openWindow('explorerWindow');
-                renderExplorer(); };
-            document.getElementById('taskmanStart').onclick = () => { startMenu.style.display = 'none';
-                openTaskManager(); };
-            document.getElementById('settingsStart').onclick = () => { startMenu.style.display = 'none';
-                openSettings(); };
-            document.getElementById('aboutStart').onclick = () => { startMenu.style.display = 'none';
-                showModal("About CyberOS",
-                    "CyberOS Professional v2.4\n\n✨ Enhanced visual design\n📁 Full My Computer support\n🖱️ Drag & Drop icons\n📝 Context menus everywhere\n💻 Built-in terminal, file manager, editor, games & more!\n\nCreated with ❤️",
-                    () => {}); };
-            document.getElementById('restartStart').onclick = () => { startMenu.style.display = 'none';
-                location.reload(); };
+            document.getElementById('calcStart').onclick = () => { startMenu.style.display = 'none'; openCalculator(); };
+            document.getElementById('snakeStart').onclick = () => { startMenu.style.display = 'none'; openSnake(); };
+            document.getElementById('termStart').onclick = () => { startMenu.style.display = 'none'; openWindow('terminalWindow'); };
+            document.getElementById('explorerStart').onclick = () => { startMenu.style.display = 'none'; currentPath = '/'; openWindow('explorerWindow'); renderExplorer(); };
+            document.getElementById('taskmanStart').onclick = () => { startMenu.style.display = 'none'; openTaskManager(); };
+            document.getElementById('settingsStart').onclick = () => { startMenu.style.display = 'none'; openSettings(); };
+            document.getElementById('aboutStart').onclick = () => { startMenu.style.display = 'none'; showModal("About CyberOS", "CyberOS Professional v2.5\nFull desktop simulator with terminal, file manager, games, and settings.", () => {}); };
+            document.getElementById('restartStart').onclick = () => { startMenu.style.display = 'none'; location.reload(); };
             document.getElementById('shutdownStart').onclick = () => {
                 startMenu.style.display = 'none';
-                document.body.innerHTML =
-                    '<div style="display:flex; align-items:center; justify-content:center; height:100vh; flex-direction:column; gap:20px; font-size:1.5rem;"><div>Shutting down CyberOS...</div><button onclick="location.reload()" style="padding:10px 24px; border-radius:40px; background:#3b82f6; color:white; border:none; cursor:pointer; font-family:inherit;">Restart</button></div>';
+                document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; flex-direction:column; gap:20px;"><div>Shutting down CyberOS...</div><button onclick="location.reload()" style="padding:10px 24px; border-radius:40px; background:#3b82f6; color:white; border:none; cursor:pointer;">Restart</button></div>';
             };
 
-            // ========== استعادة الإعدادات ==========
+            // استعادة الإعدادات المحفوظة
             const savedTheme = localStorage.getItem('cyberos-theme');
             if (savedTheme === 'light') document.body.classList.add('light');
             else document.body.classList.add('dark');
@@ -2252,11 +1796,10 @@
                 document.body.style.backgroundPosition = 'center';
             }
 
-            // ========== شاشة التمهيد وتسجيل الدخول ==========
+            // شاشة البوت وتسجيل الدخول
             const bootDiv = document.createElement('div');
-            bootDiv.style.cssText =
-                'position:fixed;inset:0;background:#060b14;display:flex;align-items:center;justify-content:center;z-index:9999;font-size:2.5rem;color:#5effbc;font-family:monospace;letter-spacing:0.05em;';
-            bootDiv.innerHTML = '<div style="text-align:center;">CyberOS<span style="animation:blink 1s infinite;">▌</span></div>';
+            bootDiv.style.cssText = 'position:fixed;inset:0;background:#060b14;display:flex;align-items:center;justify-content:center;z-index:9999;font-size:2.5rem;color:#5effbc;font-family:monospace;';
+            bootDiv.innerHTML = '<div>CyberOS<span style="animation:blink 1s infinite;">▌</span></div>';
             document.body.appendChild(bootDiv);
             const styleBlink = document.createElement('style');
             styleBlink.textContent = '@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}';
@@ -2264,17 +1807,16 @@
 
             const storedUser = localStorage.getItem('cyberos-user') || 'admin';
             const storedPass = localStorage.getItem('cyberos-pass') || '0';
-
             const loginDiv = document.createElement('div');
             loginDiv.className = 'login-overlay';
             loginDiv.style.display = 'none';
             loginDiv.innerHTML = `
                 <div class="login-box">
-                    <h2><i class="fas fa-shield-alt" style="color:var(--accent);"></i> CyberOS Login</h2>
+                    <h2><i class="fas fa-shield-alt"></i> CyberOS Login</h2>
                     <input type="text" id="loginUsername" placeholder="Username" value="admin">
                     <input type="password" id="loginPassword" placeholder="Password" value="0">
                     <button id="doLogin">🔐 Login</button>
-                    <div id="loginError" style="color:#ff8888; margin-top:12px; font-size:13px;"></div>
+                    <div id="loginError" style="color:#ff8888; margin-top:12px;"></div>
                 </div>`;
             document.body.appendChild(loginDiv);
 
@@ -2304,31 +1846,16 @@
                     document.getElementById('loginPassword').focus();
                 }
             };
-            document.getElementById('loginPassword').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') document.getElementById('doLogin').click();
-            });
 
-            // ========== دوال عامة في النطاق العام ==========
-            window.openWindow = openWindow;
-            window.closeWindow = closeWindow;
-            window.minimizeWindow = minimizeWindow;
-            window.restoreWindow = restoreWindow;
             window.openCalculator = openCalculator;
             window.openSnake = openSnake;
             window.openTaskManager = openTaskManager;
             window.openSettings = openSettings;
-            window.openFileViewer = openFileViewer;
-            window.openNanoEditor = openNanoEditor;
             window.saveNanoFile = saveNanoFile;
-            window.showModal = showModal;
-            window.showConfirm = showConfirm;
-            window.renderExplorer = renderExplorer;
-            window.renderTaskManager = renderTaskManager;
-            window.renderSettings = renderSettings;
             window.refreshUI = refreshUI;
+            window.showModal = showModal;
 
-            console.log('🚀 CyberOS Professional v2.4 — Ready.');
-            console.log('📁 My Computer now available at /mycomputer');
+            console.log('CyberOS Professional v2.5 — Ready (hack-check removed, README added, full drag & drop)');
         })();
     </script>
 </body>
